@@ -1,0 +1,46 @@
+{
+    "version": 1,
+    "name": "CustomInputActions",
+    "maps": [
+        {
+            "name": "Player",
+            "id": "13dde869-6940-4808-a2a6-3d4ef92e716e",
+            "actions": [
+                {
+                    "name": "Move",
+                    "type": "Button",
+                    "id": "0a4de821-3fcc-433c-8222-b6fcd8f1050e",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "22aba123-f9c0-4d34-b639-da8e3aff0695",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8414527-bb01-45b9-bcfe-08b129a448d3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Move",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
