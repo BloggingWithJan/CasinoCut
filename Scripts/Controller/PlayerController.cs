@@ -1,4 +1,5 @@
 using System;
+using CasinoCut.Interactable;
 using CasinoCut.Movement;
 using UnityEngine;
 using UnityEngine.AI;
@@ -15,6 +16,14 @@ namespace CasinoCut.Control
         [SerializeField]
         private LayerMask terrainLayerMask = -1; // Default to all layers, set in inspector
 
+        [SerializeField]
+        private LayerMask interactableLayerMask = -1; // Default to all layers, set in inspector
+
+        [SerializeField]
+        private float interactionDistance = 2f;
+
+        private IInteractable currentInteractable;
+
         void Awake()
         {
             inputActions = new CustomInputActions();
@@ -23,6 +32,11 @@ namespace CasinoCut.Control
 
         void Update()
         {
+            ClearHighlight();
+            if (InteractWithInteractable())
+            {
+                return;
+            }
             if (InteractWithMovement())
             {
                 return;
@@ -31,7 +45,7 @@ namespace CasinoCut.Control
 
         private bool InteractWithMovement()
         {
-            var (hasHit, hit) = GetMouseRayHit();
+            var (hasHit, hit) = GetMouseRayHit(Mathf.Infinity, terrainLayerMask);
 
             if (hasHit)
             {
@@ -44,16 +58,36 @@ namespace CasinoCut.Control
             return false;
         }
 
+        private bool InteractWithInteractable()
+        {
+            var (hasHit, hit) = GetMouseRayHit(interactionDistance, interactableLayerMask);
+
+            if (hasHit)
+            {
+                var interactable = hit.collider.GetComponent<IInteractable>();
+                if (interactable != null)
+                {
+                    Highlight(interactable);
+                    if (inputActions.Player.Interact.WasPressedThisFrame())
+                    {
+                        interactable.Interact(gameObject);
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
+
         private static Ray GetMouseRay()
         {
             return Camera.main.ScreenPointToRay(Mouse.current.position.ReadValue());
         }
 
-        private (bool hasHit, RaycastHit hit) GetMouseRayHit()
+        private (bool hasHit, RaycastHit hit) GetMouseRayHit(float maxDistance, LayerMask layerMask)
         {
             Ray ray = GetMouseRay();
             RaycastHit hit;
-            bool hasHit = Physics.Raycast(ray, out hit, Mathf.Infinity, terrainLayerMask);
+            bool hasHit = Physics.Raycast(ray, out hit, maxDistance, layerMask);
             return (hasHit, hit);
         }
 
@@ -81,6 +115,27 @@ namespace CasinoCut.Control
             {
                 isMoveHeld = false;
             };
+        }
+
+        private void Highlight(IInteractable newInteractable)
+        {
+            // Store the current target
+            currentInteractable = newInteractable;
+
+            // Display prompt (replace with UI logic in production)
+            Debug.Log("Interaction Prompt: " + newInteractable.GetInteractionPrompt());
+
+            // You could also add visual highlighting (e.g., change material color) here
+        }
+
+        private void ClearHighlight()
+        {
+            if (currentInteractable != null)
+            {
+                // Clear prompt/visuals if no longer looking at it
+                // Debug.Log("Interaction Prompt Cleared.");
+                currentInteractable = null;
+            }
         }
     }
 }
