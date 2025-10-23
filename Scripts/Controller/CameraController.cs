@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-namespace CasinoCut.Core
+namespace CasinoCut.Controller
 {
     public class CameraController : MonoBehaviour
     {

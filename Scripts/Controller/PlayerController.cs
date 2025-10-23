@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.InputSystem;
 
-namespace CasinoCut.Control
+namespace CasinoCut.Controller
 {
     public class PlayerController : MonoBehaviour
     {

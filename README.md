@@ -5,3 +5,9 @@ Prototype game to focus on specific aspects of a game
 
 ## Licensed Assets
 This project uses the asset pack "POLYGON - Casino" from synty studios. Need to add it to the Assets/License Folder
+
+
+## Preview
+![alt text](image.png)
+
+![alt text](image-1.png)
