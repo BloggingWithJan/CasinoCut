@@ -9,5 +9,11 @@ namespace CasinoCut.Interactable
 
         // Returns the text prompt (e.g., "Press E to Open," "Press E to Drink").
         string GetInteractionPrompt();
+
+        // New: Method to visually signal the object is targetable (e.g., change color, add glow).
+        void Highlight();
+
+        // New: Method to revert the visual change.
+        void UnHighlight();
     }
 }

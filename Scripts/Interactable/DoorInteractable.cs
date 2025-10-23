@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace CasinoCut.Interactable
 {
-    public class DoorInteractable : MonoBehaviour, IInteractable
+    public class DoorInteractable : BaseInteractable
     {
         private bool isOpened = false;
 
-        public void Interact(GameObject interactor)
+        public override void Interact(GameObject interactor)
         {
             if (isOpened)
             {
@@ -19,10 +19,10 @@ namespace CasinoCut.Interactable
             }
         }
 
-        public string GetInteractionPrompt()
+        public override string GetInteractionPrompt()
         {
             // The prompt changes based on the door's state
-            return isOpened ? "Press E to Close" : "Press E to Open";
+            return isOpened ? "Close [E]" : "Open [E]";
         }
 
         // --- Specific Door Logic ---

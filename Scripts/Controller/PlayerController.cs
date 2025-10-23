@@ -121,6 +121,7 @@ namespace CasinoCut.Control
         {
             // Store the current target
             currentInteractable = newInteractable;
+            newInteractable.Highlight();
 
             // Display prompt (replace with UI logic in production)
             Debug.Log("Interaction Prompt: " + newInteractable.GetInteractionPrompt());
@@ -133,7 +134,7 @@ namespace CasinoCut.Control
             if (currentInteractable != null)
             {
                 // Clear prompt/visuals if no longer looking at it
-                // Debug.Log("Interaction Prompt Cleared.");
+                currentInteractable.UnHighlight();
                 currentInteractable = null;
             }
         }
