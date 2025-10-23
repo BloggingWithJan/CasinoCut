@@ -11,22 +11,20 @@ namespace CasinoCut.Interactable
         private bool isPlaying = false;
 
         private GameObject player;
+        private SlotMachineController slotMachineController;
 
         private void Start()
         {
             player = GameObject.FindWithTag("Player");
+            slotMachineController = GetComponent<SlotMachineController>();
+            slotMachineController.onExit += StopPlaying;
+            slotMachineController.enabled = false;
         }
 
         public override void Interact(GameObject interactor)
         {
-            if (isPlaying)
-            {
-                StopPlaying();
-            }
-            else
-            {
+            if (!isPlaying)
                 StartPlaying();
-            }
         }
 
         public override string GetInteractionPrompt()
@@ -42,6 +40,7 @@ namespace CasinoCut.Interactable
             player.GetComponent<ActionScheduler>().CancelCurrentAction();
             player.GetComponent<PlayerController>().enabled = false;
             UnHighlight();
+            slotMachineController.enabled = true;
             // Add logic to start the slot machine
         }
 
@@ -49,6 +48,8 @@ namespace CasinoCut.Interactable
         {
             isPlaying = false;
             slotMachineCamera.Priority = 10;
+            slotMachineController.enabled = false;
+            player.GetComponent<PlayerController>().enabled = true;
             // Add logic to stop the slot machine
         }
     }

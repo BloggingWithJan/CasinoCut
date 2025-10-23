@@ -60,6 +60,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "SlotMachine",
+            "id": "d645cf60-7163-4ea8-916d-b3d934311eff",
+            "actions": [
+                {
+                    "name": "Exit",
+                    "type": "Button",
+                    "id": "663b234c-8573-4a0b-9a5b-9812aa84fd51",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Spin",
+                    "type": "Button",
+                    "id": "4b28b050-2a87-43c7-bc11-611197a4ce7a",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "e20c4b4a-ac22-4ad1-96a8-f43c6db266cc",
+                    "path": "<Keyboard>/escape",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Exit",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ede5b311-8ad3-4acb-8a20-833eb8456fba",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Spin",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

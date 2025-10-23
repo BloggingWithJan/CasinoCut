@@ -124,7 +124,7 @@ namespace CasinoCut.Controller
             newInteractable.Highlight();
 
             // Display prompt (replace with UI logic in production)
-            Debug.Log("Interaction Prompt: " + newInteractable.GetInteractionPrompt());
+            // Debug.Log("Interaction Prompt: " + newInteractable.GetInteractionPrompt());
 
             // You could also add visual highlighting (e.g., change material color) here
         }

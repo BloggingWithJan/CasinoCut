@@ -146,6 +146,54 @@ public partial class @CustomInputActions: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""SlotMachine"",
+            ""id"": ""d645cf60-7163-4ea8-916d-b3d934311eff"",
+            ""actions"": [
+                {
+                    ""name"": ""Exit"",
+                    ""type"": ""Button"",
+                    ""id"": ""663b234c-8573-4a0b-9a5b-9812aa84fd51"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spin"",
+                    ""type"": ""Button"",
+                    ""id"": ""4b28b050-2a87-43c7-bc11-611197a4ce7a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""e20c4b4a-ac22-4ad1-96a8-f43c6db266cc"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Exit"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ede5b311-8ad3-4acb-8a20-833eb8456fba"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spin"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -154,11 +202,16 @@ public partial class @CustomInputActions: IInputActionCollection2, IDisposable
         m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
+        // SlotMachine
+        m_SlotMachine = asset.FindActionMap("SlotMachine", throwIfNotFound: true);
+        m_SlotMachine_Exit = m_SlotMachine.FindAction("Exit", throwIfNotFound: true);
+        m_SlotMachine_Spin = m_SlotMachine.FindAction("Spin", throwIfNotFound: true);
     }
 
     ~@CustomInputActions()
     {
         UnityEngine.Debug.Assert(!m_Player.enabled, "This will cause a leak and performance issues, CustomInputActions.Player.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SlotMachine.enabled, "This will cause a leak and performance issues, CustomInputActions.SlotMachine.Disable() has not been called.");
     }
 
     /// <summary>
@@ -337,6 +390,113 @@ public partial class @CustomInputActions: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerActions" /> instance referencing this action map.
     /// </summary>
     public PlayerActions @Player => new PlayerActions(this);
+
+    // SlotMachine
+    private readonly InputActionMap m_SlotMachine;
+    private List<ISlotMachineActions> m_SlotMachineActionsCallbackInterfaces = new List<ISlotMachineActions>();
+    private readonly InputAction m_SlotMachine_Exit;
+    private readonly InputAction m_SlotMachine_Spin;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "SlotMachine".
+    /// </summary>
+    public struct SlotMachineActions
+    {
+        private @CustomInputActions m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public SlotMachineActions(@CustomInputActions wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "SlotMachine/Exit".
+        /// </summary>
+        public InputAction @Exit => m_Wrapper.m_SlotMachine_Exit;
+        /// <summary>
+        /// Provides access to the underlying input action "SlotMachine/Spin".
+        /// </summary>
+        public InputAction @Spin => m_Wrapper.m_SlotMachine_Spin;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_SlotMachine; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="SlotMachineActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(SlotMachineActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="SlotMachineActions" />
+        public void AddCallbacks(ISlotMachineActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SlotMachineActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SlotMachineActionsCallbackInterfaces.Add(instance);
+            @Exit.started += instance.OnExit;
+            @Exit.performed += instance.OnExit;
+            @Exit.canceled += instance.OnExit;
+            @Spin.started += instance.OnSpin;
+            @Spin.performed += instance.OnSpin;
+            @Spin.canceled += instance.OnSpin;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="SlotMachineActions" />
+        private void UnregisterCallbacks(ISlotMachineActions instance)
+        {
+            @Exit.started -= instance.OnExit;
+            @Exit.performed -= instance.OnExit;
+            @Exit.canceled -= instance.OnExit;
+            @Spin.started -= instance.OnSpin;
+            @Spin.performed -= instance.OnSpin;
+            @Spin.canceled -= instance.OnSpin;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SlotMachineActions.UnregisterCallbacks(ISlotMachineActions)" />.
+        /// </summary>
+        /// <seealso cref="SlotMachineActions.UnregisterCallbacks(ISlotMachineActions)" />
+        public void RemoveCallbacks(ISlotMachineActions instance)
+        {
+            if (m_Wrapper.m_SlotMachineActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="SlotMachineActions.AddCallbacks(ISlotMachineActions)" />
+        /// <seealso cref="SlotMachineActions.RemoveCallbacks(ISlotMachineActions)" />
+        /// <seealso cref="SlotMachineActions.UnregisterCallbacks(ISlotMachineActions)" />
+        public void SetCallbacks(ISlotMachineActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SlotMachineActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SlotMachineActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="SlotMachineActions" /> instance referencing this action map.
+    /// </summary>
+    public SlotMachineActions @SlotMachine => new SlotMachineActions(this);
     /// <summary>
     /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "Player" which allows adding and removing callbacks.
     /// </summary>
@@ -358,5 +518,27 @@ public partial class @CustomInputActions: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnInteract(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SlotMachine" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="SlotMachineActions.AddCallbacks(ISlotMachineActions)" />
+    /// <seealso cref="SlotMachineActions.RemoveCallbacks(ISlotMachineActions)" />
+    public interface ISlotMachineActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Exit" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnExit(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Spin" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnSpin(InputAction.CallbackContext context);
     }
 }
