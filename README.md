@@ -15,3 +15,5 @@ Project/Scene can't be played - need to add the asset packs first to the folder 
 ![alt text](image.png)
 
 ![alt text](image-1.png)
+
+![alt text](InteractableSlotMachineCinema.gif)

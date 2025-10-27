@@ -7,6 +7,9 @@ namespace CasinoCut.Interactable
     public class SlotMachineInteractable : BaseInteractable
     {
         [SerializeField]
+        GameObject slotMachineHUD;
+
+        [SerializeField]
         Cinemachine.CinemachineVirtualCamera slotMachineCamera;
         private bool isPlaying = false;
 
@@ -19,6 +22,7 @@ namespace CasinoCut.Interactable
             slotMachineController = GetComponent<SlotMachineController>();
             slotMachineController.onExit += StopPlaying;
             slotMachineController.enabled = false;
+            slotMachineHUD.SetActive(false);
         }
 
         public override void Interact(GameObject interactor)
@@ -41,6 +45,7 @@ namespace CasinoCut.Interactable
             player.GetComponent<PlayerController>().enabled = false;
             UnHighlight();
             slotMachineController.enabled = true;
+            slotMachineHUD.SetActive(true);
             // Add logic to start the slot machine
         }
 
@@ -50,6 +55,7 @@ namespace CasinoCut.Interactable
             slotMachineCamera.Priority = 10;
             slotMachineController.enabled = false;
             player.GetComponent<PlayerController>().enabled = true;
+            slotMachineHUD.SetActive(false);
             // Add logic to stop the slot machine
         }
     }
